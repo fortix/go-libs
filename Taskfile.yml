@@ -1,0 +1,69 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Run all tests
+    cmds:
+      - go test ./... -short
+
+  test:
+    desc: Run all tests with verbose output
+    cmds:
+      - go test ./... -v -short
+
+  test:cover:
+    desc: Run tests with coverage report
+    cmds:
+      - go test ./... -short -cover
+
+  test:cover:html:
+    desc: Run tests with coverage and open HTML report
+    cmds:
+      - go test ./... -short -coverprofile=coverage.out
+      - go tool cover -html=coverage.out
+
+  test:integration:
+    desc: Run integration tests (requires network)
+    cmds:
+      - go test ./... -v
+
+  test:cache:
+    desc: Run cache package tests
+    cmds:
+      - go test ./cache -v
+
+  test:logger:
+    desc: Run logger package tests
+    cmds:
+      - go test ./logger -v
+
+  test:dns:
+    desc: Run dns package tests
+    cmds:
+      - go test ./netx/dns -v
+
+  lint:
+    desc: Run linter
+    cmds:
+      - go vet ./...
+
+  fmt:
+    desc: Format code
+    cmds:
+      - go fmt ./...
+
+  tidy:
+    desc: Tidy go modules
+    cmds:
+      - go mod tidy
+
+  build:
+    desc: Build all packages
+    cmds:
+      - go build ./...
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -f coverage.out
+      - go clean
