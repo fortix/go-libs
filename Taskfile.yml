@@ -67,3 +67,22 @@ tasks:
     cmds:
       - rm -f coverage.out
       - go clean
+
+  # Release tasks
+  push-tag:
+    desc: Create and push a version tag (usage task push-tag -- v0.0.1)
+    cmds:
+      - |
+        TAG={{.CLI_ARGS}}
+        if [ -z "$TAG" ]; then
+          echo "Usage: task push-tag -- v0.0.1"
+          exit 1
+        fi
+        if ! echo "$TAG" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+'; then
+          echo "Tag must match vX.Y.Z format"
+          exit 1
+        fi
+        echo "Creating tag $TAG..."
+        git tag -a "$TAG" -m "Release $TAG"
+        git push origin "$TAG"
+        echo "Tag $TAG pushed. GitHub Actions will create the release."
